@@ -10,5 +10,4 @@ public abstract class BaseEntity
     
     public Guid Id { get; init; }
     public DateTimeOffset Created { get; init; }
-    public DateTimeOffset? Updated { get; set; }
 }

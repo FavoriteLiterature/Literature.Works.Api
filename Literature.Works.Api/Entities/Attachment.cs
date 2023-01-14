@@ -1,7 +1,9 @@
-﻿using Literature.Works.Api.Entities.Abstractions;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using Literature.Works.Api.Entities.Abstractions;
 
 namespace Literature.Works.Api.Entities;
 
+[Table("Attachments")]
 public class Attachment : BaseEntity
 {
     public Guid WorkId { get; set; }

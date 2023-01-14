@@ -1,7 +1,9 @@
-﻿using Literature.Works.Api.Entities.Abstractions;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using Literature.Works.Api.Entities.Abstractions;
 
 namespace Literature.Works.Api.Entities;
 
+[Table("Works")]
 public class Work : BaseEntity
 {
     public string Name { get; set; }
