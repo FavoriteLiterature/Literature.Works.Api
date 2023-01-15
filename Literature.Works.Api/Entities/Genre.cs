@@ -8,4 +8,6 @@ public class Genre : BaseEntity
 {
     public string Name { get; set; }
     public string? Description { get; set; }
+    
+    public List<Work> Works { get; set; }
 }
