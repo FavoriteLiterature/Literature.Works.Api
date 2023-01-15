@@ -1,7 +1,8 @@
-﻿using Literature.Works.Api.Entities;
-using Literature.Works.Api.Infrastructure.Abstractions;
+﻿using Literature.Works.Api.Application.Commands.Genres;
+using Literature.Works.Api.Application.Queries.Genres;
+using Literature.Works.Models.Genres;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace Literature.Works.Api.Controllers;
 
@@ -9,30 +10,21 @@ namespace Literature.Works.Api.Controllers;
 [Route("api/genres")]
 public class GenresController : ControllerBase
 {
-    private readonly IRepository _repository;
+    private readonly IMediator _mediator;
 
-    public GenresController(IRepository repository)
+    public GenresController(IMediator mediator)
     {
-        _repository = repository;
+        _mediator = mediator;
     }
-    
+
     [HttpGet]
-    public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
-    {
-        var genres = _repository.Genres.AsQueryable();
-        
-        var entities = await genres
-            .ToArrayAsync(cancellationToken);
-
-        return Ok(entities);
-    }
+    [ProducesResponseType(typeof(GenreModel), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetAll([FromQuery] GetGenresListRequest request) 
+        => Ok(await _mediator.Send(request));
 
     [HttpPost]
-    public async Task<IActionResult> Add([FromBody] Genre genre, CancellationToken cancellationToken)
-    {
-        await _repository.AddAsync(genre, cancellationToken);
-        await _repository.SaveChangesAsync(cancellationToken);
-
-        return Ok();
-    }
+    [ProducesResponseType(typeof(GenreModel), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> Add([FromBody] AddGenreRequest request)
+        => Ok(await _mediator.Send(request));
 }

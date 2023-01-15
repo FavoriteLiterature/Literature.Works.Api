@@ -5,7 +5,7 @@ public abstract class BaseEntity
     public BaseEntity()
     {
         Id = Guid.NewGuid();
-        Created = DateTimeOffset.Now;
+        Created = DateTimeOffset.UtcNow;
     }
     
     public Guid Id { get; init; }
