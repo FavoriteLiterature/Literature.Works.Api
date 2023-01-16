@@ -1,4 +1,5 @@
 using Literature.Works.Api.Infrastructure;
+using Microsoft.EntityFrameworkCore;
 
 namespace Literature.Works.Api;
 
@@ -19,6 +20,7 @@ public class Program
         try
         {
             var context = services.GetRequiredService<DataContext>();
+            await context.Database.MigrateAsync();
             await DbInitializer.Initialize(context);
         }
         catch (Exception ex)
