@@ -1,10 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Literature.Works.Api.Entities.Abstractions;
 
 namespace Literature.Works.Api.Entities;
 
 [Table("AttachmentTypes")]
-public class AttachmentType
+public class AttachmentType : BaseEntity
 {
     [Key]
     public string Name { get; set; }

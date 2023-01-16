@@ -16,7 +16,8 @@ namespace Literature.Works.Api.Migrations
                 columns: table => new
                 {
                     Name = table.Column<string>(type: "text", nullable: false),
-                    Description = table.Column<string>(type: "text", nullable: true)
+                    Description = table.Column<string>(type: "text", nullable: true),
+                    Created = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -29,12 +30,26 @@ namespace Literature.Works.Api.Migrations
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     UserId = table.Column<Guid>(type: "uuid", nullable: false),
-                    PublicEmail = table.Column<string>(type: "text", nullable: false),
+                    PublicEmail = table.Column<string>(type: "text", nullable: true),
                     Created = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Authors", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Genres",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    Description = table.Column<string>(type: "text", nullable: true),
+                    Created = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Genres", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -81,23 +96,28 @@ namespace Literature.Works.Api.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Genres",
+                name: "DbGenreWorks",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Name = table.Column<string>(type: "text", nullable: false),
-                    Description = table.Column<string>(type: "text", nullable: true),
-                    WorkId = table.Column<Guid>(type: "uuid", nullable: true),
+                    GenreId = table.Column<Guid>(type: "uuid", nullable: false),
+                    WorkId = table.Column<Guid>(type: "uuid", nullable: false),
                     Created = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Genres", x => x.Id);
+                    table.PrimaryKey("PK_DbGenreWorks", x => new { x.GenreId, x.WorkId });
                     table.ForeignKey(
-                        name: "FK_Genres_Works_WorkId",
+                        name: "FK_DbGenreWorks_Genres_GenreId",
+                        column: x => x.GenreId,
+                        principalTable: "Genres",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_DbGenreWorks_Works_WorkId",
                         column: x => x.WorkId,
                         principalTable: "Works",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
@@ -106,8 +126,8 @@ namespace Literature.Works.Api.Migrations
                 column: "AttachmentTypeName");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Genres_WorkId",
-                table: "Genres",
+                name: "IX_DbGenreWorks_WorkId",
+                table: "DbGenreWorks",
                 column: "WorkId");
 
             migrationBuilder.CreateIndex(
@@ -123,10 +143,13 @@ namespace Literature.Works.Api.Migrations
                 name: "Attachments");
 
             migrationBuilder.DropTable(
-                name: "Genres");
+                name: "DbGenreWorks");
 
             migrationBuilder.DropTable(
                 name: "AttachmentTypes");
+
+            migrationBuilder.DropTable(
+                name: "Genres");
 
             migrationBuilder.DropTable(
                 name: "Works");

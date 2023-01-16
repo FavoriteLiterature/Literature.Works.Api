@@ -4,12 +4,12 @@ using Literature.Works.Api.Entities.Abstractions;
 namespace Literature.Works.Api.Entities;
 
 [Table("Works")]
-public class Work : BaseEntity
+public class Work : BaseEntityGuid
 {
     public string Name { get; set; }
     public Guid AuthorId { get; set; }
-    public float? Rating { get; set; } = null;
+    public float? Rating { get; set; }
     public string? Description { get; set; }
     
-    public List<Genre> Genres { get; set; }
+    public ICollection<GenreWork> Genres { get; set; }
 }

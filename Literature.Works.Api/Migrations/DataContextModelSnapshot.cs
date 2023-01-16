@@ -22,21 +22,6 @@ namespace Literature.Works.Api.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("GenreWork", b =>
-                {
-                    b.Property<Guid>("GenresId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("WorksId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("GenresId", "WorksId");
-
-                    b.HasIndex("WorksId");
-
-                    b.ToTable("GenreWork");
-                });
-
             modelBuilder.Entity("Literature.Works.Api.Entities.Attachment", b =>
                 {
                     b.Property<Guid>("Id")
@@ -71,6 +56,9 @@ namespace Literature.Works.Api.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("text");
 
+                    b.Property<DateTimeOffset>("Created")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<string>("Description")
                         .HasColumnType("text");
 
@@ -89,7 +77,6 @@ namespace Literature.Works.Api.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("PublicEmail")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<Guid>("UserId")
@@ -121,6 +108,24 @@ namespace Literature.Works.Api.Migrations
                     b.ToTable("Genres");
                 });
 
+            modelBuilder.Entity("Literature.Works.Api.Entities.GenreWork", b =>
+                {
+                    b.Property<Guid>("GenreId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("WorkId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTimeOffset>("Created")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("GenreId", "WorkId");
+
+                    b.HasIndex("WorkId");
+
+                    b.ToTable("DbGenreWorks");
+                });
+
             modelBuilder.Entity("Literature.Works.Api.Entities.Work", b =>
                 {
                     b.Property<Guid>("Id")
@@ -150,26 +155,30 @@ namespace Literature.Works.Api.Migrations
                     b.ToTable("Works");
                 });
 
-            modelBuilder.Entity("GenreWork", b =>
-                {
-                    b.HasOne("Literature.Works.Api.Entities.Genre", null)
-                        .WithMany()
-                        .HasForeignKey("GenresId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Literature.Works.Api.Entities.Work", null)
-                        .WithMany()
-                        .HasForeignKey("WorksId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("Literature.Works.Api.Entities.Attachment", b =>
                 {
                     b.HasOne("Literature.Works.Api.Entities.AttachmentType", null)
                         .WithMany("Attachments")
                         .HasForeignKey("AttachmentTypeName");
+                });
+
+            modelBuilder.Entity("Literature.Works.Api.Entities.GenreWork", b =>
+                {
+                    b.HasOne("Literature.Works.Api.Entities.Genre", "Genre")
+                        .WithMany("Works")
+                        .HasForeignKey("GenreId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Literature.Works.Api.Entities.Work", "Work")
+                        .WithMany("Genres")
+                        .HasForeignKey("WorkId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Genre");
+
+                    b.Navigation("Work");
                 });
 
             modelBuilder.Entity("Literature.Works.Api.Entities.Work", b =>
@@ -189,6 +198,16 @@ namespace Literature.Works.Api.Migrations
             modelBuilder.Entity("Literature.Works.Api.Entities.Author", b =>
                 {
                     b.Navigation("Works");
+                });
+
+            modelBuilder.Entity("Literature.Works.Api.Entities.Genre", b =>
+                {
+                    b.Navigation("Works");
+                });
+
+            modelBuilder.Entity("Literature.Works.Api.Entities.Work", b =>
+                {
+                    b.Navigation("Genres");
                 });
 #pragma warning restore 612, 618
         }
