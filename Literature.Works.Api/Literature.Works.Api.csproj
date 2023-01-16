@@ -18,6 +18,7 @@
       <Content Update="appsettings.Development.json">
         <DependentUpon>appsettings.json</DependentUpon>
       </Content>
+      <PackageReference Include="Microsoft.NET.Build.Containers" Version="0.2.7" />
     </ItemGroup>
 
     <ItemGroup>
