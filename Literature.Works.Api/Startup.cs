@@ -1,6 +1,7 @@
 ﻿using Hellang.Middleware.ProblemDetails;
 using Literature.Works.Api.Infrastructure;
 using Literature.Works.Api.Infrastructure.Abstractions;
+using Literature.Works.Api.Services;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -32,7 +33,9 @@ public class Startup
         services
             .AddMediatR(typeof(Startup))
             .AddAutoMapper(typeof(Startup));
-
+        
+        services.AddHostedService<RabbitMqService>();
+        
         services
             .AddDbContext<DataContext>(options => options.UseNpgsql(connectionString))
             .AddScoped<IRepository, DataContext>();
