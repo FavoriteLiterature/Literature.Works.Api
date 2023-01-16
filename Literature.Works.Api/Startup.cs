@@ -1,6 +1,7 @@
 ﻿using Hellang.Middleware.ProblemDetails;
 using Literature.Works.Api.Infrastructure;
 using Literature.Works.Api.Infrastructure.Abstractions;
+using Literature.Works.Api.Options;
 using Literature.Works.Api.Services;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -21,6 +22,9 @@ public class Startup
     {
         var connectionString = _configuration.GetConnectionString("DefaultConnection");
 
+        services.AddOptions<ApplicationOptions>().BindConfiguration("");
+        services.AddOptions<RabbitMq>().BindConfiguration("RabbitMq");
+        
         services.AddProblemDetails(options =>
         {
             options.Map<ArgumentException>(exception => new ProblemDetails

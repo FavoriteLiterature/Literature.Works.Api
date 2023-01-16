@@ -1,7 +1,9 @@
 using System.Text;
 using System.Text.Json;
 using Literature.Works.Api.Application.Commands.Works;
+using Literature.Works.Api.Options;
 using MediatR;
+using Microsoft.Extensions.Options;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 
@@ -12,23 +14,28 @@ public class RabbitMqService : BackgroundService
     private readonly IModel _channel;
     private readonly IServiceScopeFactory _serviceScopeFactory;
     private readonly EventingBasicConsumer _consumer;
+    private readonly string _queue;
 
-    public RabbitMqService(IServiceScopeFactory serviceScopeFactory)
+    public RabbitMqService(IServiceScopeFactory serviceScopeFactory, IOptions<RabbitMq> options)
     {
         _serviceScopeFactory = serviceScopeFactory;
+
+        RabbitMq rabbitMqOptions = options.Value;
         
         var factory = new ConnectionFactory { 
-            HostName = "localhost",
-            Port = 5672,
-            UserName = "guest",
-            Password = "guest", 
+            HostName = rabbitMqOptions.HostName,
+            Port = rabbitMqOptions.Port,
+            UserName = rabbitMqOptions.UserName,
+            Password = rabbitMqOptions.Password, 
         };
+
+        _queue = rabbitMqOptions.Queue;
             
         var connection = factory.CreateConnection();
         _channel = connection.CreateModel();
         
         _channel.QueueDeclare(
-            queue: "VerifiedWorks", 
+            queue: _queue, 
             durable: true, 
             exclusive: false, 
             autoDelete: false, 
@@ -64,7 +71,7 @@ public class RabbitMqService : BackgroundService
             }
         };
 
-        _channel.BasicConsume("VerifiedWorks", false, _consumer);
+        _channel.BasicConsume(_queue, false, _consumer);
         return Task.CompletedTask;
     }
 
