@@ -2,6 +2,8 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Literature.Works.Api", "Literature.Works.Api\Literature.Works.Api.csproj", "{548DA2D2-6CDA-489E-AE3F-5EACA4A13134}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Literature.Works.Models", "Literature.Works.Models\Literature.Works.Models.csproj", "{3D1FF549-6541-4B3A-99A7-672B814FB83F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +14,9 @@ Global
 		{548DA2D2-6CDA-489E-AE3F-5EACA4A13134}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{548DA2D2-6CDA-489E-AE3F-5EACA4A13134}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{548DA2D2-6CDA-489E-AE3F-5EACA4A13134}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3D1FF549-6541-4B3A-99A7-672B814FB83F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3D1FF549-6541-4B3A-99A7-672B814FB83F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3D1FF549-6541-4B3A-99A7-672B814FB83F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3D1FF549-6541-4B3A-99A7-672B814FB83F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
