@@ -11,16 +11,19 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: "Setup .NET"
+      - name: Setup .NET
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: 7.0.x
 
-      - name: "Build"
+      - name: Build
         run: dotnet build
 
-      - name: "Publish"
+      - name: Publish
         run: dotnet publish --os linux --arch x64 --configuration Release -p:PublishProfile=DefaultContainer
+
+      - name: Test
+        run: dotnet test
 
       - name: Docker Login
         uses: actions-hub/docker/login@master
